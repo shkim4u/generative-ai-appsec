@@ -11,10 +11,10 @@ class GenerativeAiTxt2nluSagemakerStack(Stack):
 
     def __init__(self, scope: Construct, construct_id: str, model_info, **kwargs) -> None:
         super().__init__(scope, construct_id, **kwargs)
-        
+
         role = iam.Role(self, "Gen-AI-SageMaker-Policy", assumed_by=iam.ServicePrincipal("sagemaker.amazonaws.com"))
         role.add_managed_policy(iam.ManagedPolicy.from_aws_managed_policy_name("AmazonS3FullAccess"))
-        
+
         sts_policy = iam.Policy(self, "sm-deploy-policy-sts",
                                     statements=[iam.PolicyStatement(
                                         effect=iam.Effect.ALLOW,
@@ -39,7 +39,7 @@ class GenerativeAiTxt2nluSagemakerStack(Stack):
                                         resources=["*"]
                                     )]
                                 )
-        
+
         ecr_policy = iam.Policy(self, "sm-deploy-policy-ecr",
                                     statements=[iam.PolicyStatement(
                                         effect=iam.Effect.ALLOW,
@@ -49,17 +49,18 @@ class GenerativeAiTxt2nluSagemakerStack(Stack):
                                         resources=["*"]
                                     )]
                                 )
-                                
+
         role.attach_inline_policy(sts_policy)
         role.attach_inline_policy(logs_policy)
-        role.attach_inline_policy(ecr_policy)        
-        
+        role.attach_inline_policy(ecr_policy)
+
         endpoint = SageMakerEndpointConstruct(self, "TXT2NLU",
                                     project_prefix = "GenerativeAiDemo",
-                                    
+
                                     role_arn= role.role_arn,
 
-                                    model_name = "HuggingfaceText2TextFlan",
+                                    # model_name = "HuggingfaceText2TextFlan",
+                                    model_name = "CodeLlama-7b",
                                     model_bucket_name = model_info["model_bucket_name"],
                                     model_bucket_key = model_info["model_bucket_key"],
                                     model_docker_image = model_info["model_docker_image"],
@@ -81,9 +82,9 @@ class GenerativeAiTxt2nluSagemakerStack(Stack):
 
                                     deploy_enable = True
         )
-        
+
         endpoint.node.add_dependency(sts_policy)
         endpoint.node.add_dependency(logs_policy)
         endpoint.node.add_dependency(ecr_policy)
-        
+
         ssm.StringParameter(self, "txt2nlu_sm_endpoint", parameter_name="txt2nlu_sm_endpoint", string_value=endpoint.endpoint_name)
