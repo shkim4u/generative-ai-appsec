@@ -110,13 +110,13 @@ docker --version
 On your local machine, clone the AWS CDK application with the following command:
 
 ```
-git clone https://github.com/aws-samples/generative-ai-sagemaker-cdk-demo.git
+git clone https://github.com/shkim4u/generative-ai-appsec
 ```
 
 Navigate to the project folder:
 
 ```
-cd generative-ai-sagemaker-cdk-demo
+cd generative-ai-appsec
 ```
 
 Before we deploy the application, let's review the directory structure:

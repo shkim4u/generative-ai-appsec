@@ -30,6 +30,7 @@ TXT2NLU_MODEL_INFO = get_sagemaker_uris(model_id=TXT2NLU_MODEL_ID,
                                         model_task_type=TXT2NLU_MODEL_TASK_TYPE,
                                         instance_type=TXT2NLU_INFERENCE_INSTANCE_TYPE,
                                         region_name=region_name)
+# TXT2NLU_MODEL_INFO = "https://jumpstart-cache-prod-ap-northeast-2.s3.ap-northeast-2.amazonaws.com/meta-infer/infer-meta-textgeneration-llama-codellama-7b.tar.gz"
 
 app = cdk.App()
 
